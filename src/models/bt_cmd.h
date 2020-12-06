@@ -10,16 +10,17 @@ class BtCMD {
     const int READ_TIMEOUT = 1000000;
     static BtCMD* get_instance();
     bool process();
-    class Action {
-       public:
-        Action(std::string cmd, std::string (*listener)(std::string parm));
-        std::string (*listener)(std::string parm);
-    };
+    // class Action {
+    //    public:
+    //     Action(std::string cmd, std::string (*listener)(std::string parm));
+    //     std::string (*listener)(std::string parm);
+    // };
+    void add_event_listener(std::string cmd, std::string (*listener)(std::string parm));
     void send_command(std::string cmd, std::string parm);    
    private:
     BtCMD();
     BluetoothSerial serial;
-    std::map<std::string, BtCMD::Action*> actions;
+    std::map<std::string, std::string (*)(std::string)> actions;
     static BtCMD* instance;
 };
 #endif

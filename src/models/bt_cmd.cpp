@@ -16,9 +16,8 @@ BtCMD* BtCMD::get_instance() {
 }
 BtCMD* BtCMD::instance = NULL;
 
-BtCMD::Action::Action(std::string cmd, std::string (*listener)(std::string parm)) {
-    this->listener = listener;
-    BtCMD::get_instance()->actions[cmd] = this;
+void BtCMD::add_event_listener(std::string cmd, std::string (*listener)(std::string parm)) {
+    BtCMD::get_instance()->actions[cmd] = listener;
 }
 
 bool BtCMD::process() {
@@ -45,11 +44,14 @@ bool BtCMD::process() {
     while (ss >> parm) {
         parm += " ";
     };
+    if (parm[parm.length() - 1] == ' ') {
+        parm = parm.substr(0, parm.length() - 1);
+    }
     if (this->actions.find(cmd) != this->actions.end()) {
         Serial.println("command found!");
         Serial.println(cmd.c_str());
         Serial.println("");
-        (*(this->actions[cmd]->listener))(parm);
+        (*(this->actions[cmd]))(parm);
     } else {
 
     }

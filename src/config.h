@@ -9,6 +9,7 @@ class Config {
    public:
     std::string device_name;
     std::string pin_code;
+    const static int light_pin = 17;
     static Config *get_config();
 
     class GPS {
